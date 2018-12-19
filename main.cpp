@@ -43,10 +43,48 @@ public:
     int GetDEF() ;
     int GetHeight() ;
     void Insert( DataStruct* tempData ) {
-        if ( root == NULL ) root = tempData ;
-        else {
+        bool NotYet = true;
+        DataStruct* parentWalker = NULL ;
+        DataStruct* treeWalker = NULL ;
 
-        }
+        if ( root == NULL ) {
+                root = tempData ;
+                treeWalker = root;
+        } // if
+
+        else {
+            treeWalker = root;
+            while( NotYet ){
+
+                if ( treeWalker->HP == tempData->HP ) {
+                  parentWalker = treeWalker;
+                  while( parentWalker->parent != NULL ){
+                    parentWalker = parentWalker->parent;
+                  } // while
+
+                  parentWalker->parent = tempData;
+                } // if
+
+                else if( treeWalker->HP < tempData->HP ){
+                  if( treeWalker->rightChild == NULL ) {
+                        treeWalker->rightChild = tempData ;
+                        NotYet = false;
+                  } // if
+
+                  else treeWalker = treeWalker->rightChild ;
+                } // if
+
+                else if( treeWalker->HP > tempData->HP ){
+                  if( treeWalker->leftChild == NULL ) {
+                        treeWalker->leftChild = tempData ;
+                        NotYet = false;
+                  } // if
+
+                  else treeWalker = treeWalker->leftChild ;
+                } // if
+            } // while
+
+        } // else
     } // Insert by HP, print out the data
 
     void Analyze() {
@@ -54,6 +92,7 @@ public:
         DataStruct* tempData = NULL ;
         string value = "\0" ;
         getline( input, value ) ; // read the labels in the first line
+        tempData = new DataStruct;
 
         while ( getline( input, value ) ) {
             // cout << value << endl ;
